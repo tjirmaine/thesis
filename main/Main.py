@@ -1,3 +1,29 @@
+def adoption(graph, adopted, threshold):
+    """Function for updating adopted nodes in a graph"""
+
+    # loop all nodes
+    for node in graph:
+
+        # if node already adopted then skip
+        if node in adopted:
+            continue
+
+        # initialise count and get node's neighbours
+        count = 0
+        neighbours = graph[node]
+
+        # loop over all neighbours and increment count if that neighbour is an adopter
+        for neighbour in neighbours:
+            if neighbour in adopted:
+                count += 1
+
+        # calculate ratio adopters/neighbours
+        ratio = count/len(neighbours)
+        # add node to adopters if ratio is geq than threshold
+        if ratio >= threshold:
+            adopted.append(node)
+
+
 def friendship_selection(graph):
     """Function for updating edges in graph"""
 
@@ -40,7 +66,7 @@ This program is able to perform graph network updates
 if __name__ == "__main__":
     # adjacency list
     links = {}
-    beliefs = {}
+    adopters = []
 
     add_node(1, links)
     add_node(2, links)
