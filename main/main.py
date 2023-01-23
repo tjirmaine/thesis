@@ -18,14 +18,14 @@ if __name__ == "__main__":
     runs = 50
 
     # initialise social networks model
-    n_nodes = 500
-    p_edge = 0.3
-    p_behaviour = 0.3
+    n_nodes = 50
+    p_edge = 0.1
+    p_behaviour = 0.2
     threshold_adopt = 0.3
-    threshold_link = 0.4
+    threshold_link = 0.5
+    behaviours = ['A', 'B', 'C', 'D']
     links = {}
     adopters = {}
-    behaviours = ['A', 'B', 'C', 'D']
 
     for n in range(runs):
 

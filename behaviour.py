@@ -31,8 +31,8 @@ def adoption(graph, adoption, threshold):
             else:
                 ratio = count/len(neighbours)
 
-            # add node to new adopters if ratio is geq than threshold
-            if ratio >= threshold:
+            # add node to new adopters if ratio is greater than threshold
+            if ratio > threshold:
                 new_adopters.append(node)
 
         new_adoption[behaviour] = new_adopters
@@ -77,7 +77,7 @@ def make_friends(graph, adopters, threshold):
         # collecting all second neighbours into a list and removing duplicates
         second_neighbours = []
         for neighbour in neighbours:
-            second_neighbours.append(graph[neighbour])
+            second_neighbours.extend(graph[neighbour])
         second_neighbours = list(dict.fromkeys(second_neighbours))
 
         # if nodes aren't already neighbours and are similar enough then add edge
@@ -91,30 +91,9 @@ def make_friends(graph, adopters, threshold):
                 # sanity check
                 if len(adopters) > 0:
                     ratio = len(sim) / len(adopters)
-                    # add link if ratio geq threshold
-                    if ratio >= threshold:
+                    # add link if ratio greater threshold
+                    if ratio > threshold:
                         add_neighbour(node, new, new_edges)
-        # for neighbour in neighbours:
-        #     second_neighbours = graph[neighbour]
-        #     for second_neighbour in second_neighbours:
-        #         # ignore itself
-        #         if node == second_neighbour:
-        #             continue
-        #
-        #         # potential new neighbour
-        #         if second_neighbour not in neighbours and second_neighbour not in new_neighbours:
-        #             # check if node similarities
-        #             sim = similarity(node, second_neighbour, adopters)
-        #
-        #             # sanity check
-        #             if len(adopters) > 0:
-        #                 ratio = len(sim) / len(adopters)
-        #
-        #                 # add link if ratio exceeds threshold
-        #                 if ratio >= threshold:
-        #                     add_neighbour(node, second_neighbour, new_edges)
-        #             else:
-        #                 continue
     return new_edges
 
 
@@ -145,7 +124,7 @@ def unadopt(graph, adoption, threshold):
                 ratio = count / len(neighbours)
 
             # add node to deserters if ratio less than threshold
-            if ratio < threshold:
+            if ratio <= threshold:
                 new_deserters.append(node)
 
         non_adopters[behaviour] = new_deserters
@@ -173,7 +152,7 @@ def lose_friends(graph, adopters, threshold):
             sim = similarity(node, neighbour, adopters)
             if len(adopters) > 0:
                 ratio = len(sim) / len(adopters)
-                if ratio < threshold:
+                if ratio <= threshold:
                     add_neighbour(node, neighbour, remove_edges)
 
     return remove_edges

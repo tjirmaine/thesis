@@ -13,7 +13,7 @@ def r1(g1, a1, threshold_adopt, threshold_link, n_nodes, max_steps=50):
 
     for i in range(max_steps):
         # print network
-        print_step(g1, a1, counter)
+        # print_step(g1, a1, counter)
 
         # get no. adopters at each time step
         y_a.append(len(a1['A']))
@@ -49,7 +49,7 @@ def r2(g2, a2, threshold_adopt, threshold_link, n_nodes, max_steps=50):
     counter = 0
     for i in range(max_steps):
         # print network
-        print_step(g2, a2, counter)
+        # print_step(g2, a2, counter)
 
         # get no. adopters at each time step
         y_a.append(len(a2['A']))
@@ -88,7 +88,7 @@ def r3(g3, a3, threshold_adopt, n_nodes, max_steps=50):
     counter = 0
     for i in range(max_steps):
         # print network
-        print_step(g3, a3, counter)
+        # print_step(g3, a3, counter)
 
         # get no. adopters at each time step
         y_a.append(len(a3['A']))
