@@ -66,12 +66,17 @@ if __name__ == "__main__":
 
         ### define steps here ###
         # monotonic FS + non-monotonic diffusion
-        r1(g1, a1, threshold_adopt, threshold_link, n_nodes)
+        r1_a, r1_b, r1_c, r1_d = r1(g1, a1, threshold_adopt, threshold_link, n_nodes)
 
         # non-monotonic FS + non-monotonic diffusion
-        r2(g2, a2, threshold_adopt, threshold_link, n_nodes)
+        r2_a, r2_b, r2_c, r2_d = r2(g2, a2, threshold_adopt, threshold_link, n_nodes)
 
         # non-monotonic diffusion
-        r3(g3, a3, threshold_adopt, n_nodes)
+        r3_a, r3_b, r3_c, r3_d = r3(g3, a3, threshold_adopt, n_nodes)
+
+        plot_graph_behaviour(r1_a, r2_a, r3_a, "Behaviour A")
+        plot_graph_behaviour(r1_b, r2_b, r3_b, "Behaviour B")
+        plot_graph_behaviour(r1_c, r2_c, r3_c, "Behaviour C")
+        plot_graph_behaviour(r1_d, r2_d, r3_d, "Behaviour D")
 
         runs -= 1

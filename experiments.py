@@ -9,7 +9,6 @@ def r1(g1, a1, threshold_adopt, threshold_link, n_nodes, max_steps=50):
 
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
-    x = np.arange(0, max_steps)
 
     for i in range(max_steps):
         # print network
@@ -34,19 +33,19 @@ def r1(g1, a1, threshold_adopt, threshold_link, n_nodes, max_steps=50):
         remove(a1, remove_adopters)
 
         if check_stable(new_edges) and check_stable(add_adopters) and check_stable(remove_adopters):
-            x = np.arange(0, i+1)
             print(f'stable')
             break
-    graph(y_a, y_b, y_c, y_d, x, "monotonic FS + non-monotonic diffusion")
     print(f'full cascades: {full_cascade(a1, n_nodes)}')
+
+    return y_a, y_b, y_c, y_d
 
 
 def r2(g2, a2, threshold_adopt, threshold_link, n_nodes, max_steps=50):
     """Function to run non-monotonic FS + non-monotonic diffusion"""
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
-    x = np.arange(0, max_steps)
     counter = 0
+
     for i in range(max_steps):
         # print network
         # print_step(g2, a2, counter)
@@ -74,18 +73,17 @@ def r2(g2, a2, threshold_adopt, threshold_link, n_nodes, max_steps=50):
         if check_stable(new_edges) and check_stable(add_adopters) and check_stable(remove_adopters) \
                 and check_stable(remove_edges):
             print(f'stable')
-            x = np.arange(0, i + 1)
             break
-    graph(y_a, y_b, y_c, y_d, x, "non-monotonic FS + non-monotonic diffusion")
     print(f'full cascades: {full_cascade(a2, n_nodes)}')
+    return y_a, y_b, y_c, y_d
 
 
 def r3(g3, a3, threshold_adopt, n_nodes, max_steps=50):
     """Function to run non-monotonic diffusion"""
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
-    x = np.arange(0, max_steps)
     counter = 0
+
     for i in range(max_steps):
         # print network
         # print_step(g3, a3, counter)
@@ -106,22 +104,35 @@ def r3(g3, a3, threshold_adopt, n_nodes, max_steps=50):
         remove(a3, remove_adopters)
         if check_stable(remove_adopters):
             print(f'stable')
-            x = np.arange(0, i + 1)
             break
-    graph(y_a, y_b, y_c, y_d, x, "non-monotonic diffusion")
     print(f'full cascades: {full_cascade(a3, n_nodes)}')
+    return y_a, y_b, y_c, y_d
 
 
-def graph(y1, y2, y3, y4, x_axis, name):
-    # plot adopters over time
+def plot_graph_rule(y1, y2, y3, y4, name):
+    """plot adopters over time for a rule"""
     plt.figure()
-    plt.plot(x_axis, y1)
-    plt.plot(x_axis, y2, '--')
-    plt.plot(x_axis, y3, '-.')
-    plt.plot(x_axis, y4, ':')
+    plt.plot(y1, label='A')
+    plt.plot(y2, '--', label='B')
+    plt.plot(y3, '-.', label='C')
+    plt.plot(y4, ':', label='D')
     plt.xlabel("Steps")
     plt.ylabel("# of adopters")
     plt.title(f'Adopters evolution {name}')
+    plt.legend(loc='upper right')
+    plt.show()
+
+
+def plot_graph_behaviour(r1, r2, r3, name):
+    """plot adopters over time for a behaviour"""
+    plt.figure()
+    plt.plot(r1, label="R1")
+    plt.plot(r2, '--', label="R2")
+    plt.plot(r3, '-.', label="R3")
+    plt.xlabel("Steps")
+    plt.ylabel("# of adopters")
+    plt.title(f'Adopters evolution {name}')
+    plt.legend(loc='upper right')
     plt.show()
 
 
