@@ -1,16 +1,18 @@
 from behaviour import *
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 def r1(g1, a1, threshold_adopt, threshold_link, n_nodes, max_steps=50):
-    """Function to run monotonic FS + non-monotonic diffusion updates"""
+    """
+    Function to run monotonic FS + non-monotonic diffusion updates
+    :returns 4 arrays, each showing the diffusion of a behaviour
+    """
     counter = 0
 
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
 
-    for i in range(max_steps):
+    while counter < max_steps:
         # print network
         # print_step(g1, a1, counter)
 
@@ -33,20 +35,22 @@ def r1(g1, a1, threshold_adopt, threshold_link, n_nodes, max_steps=50):
         remove(a1, remove_adopters)
 
         if check_stable(new_edges) and check_stable(add_adopters) and check_stable(remove_adopters):
-            print(f'stable')
+            # print(f'stable')
             break
-    print(f'full cascades: {full_cascade(a1, n_nodes)}')
-
+    # print(f'full cascades: {full_cascade(a1, n_nodes)}')
     return y_a, y_b, y_c, y_d
 
 
 def r2(g2, a2, threshold_adopt, threshold_link, n_nodes, max_steps=50):
-    """Function to run non-monotonic FS + non-monotonic diffusion"""
+    """
+    Function to run non-monotonic FS + non-monotonic diffusion
+    :returns 4 arrays, each showing the diffusion of a behaviour
+    """
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
     counter = 0
 
-    for i in range(max_steps):
+    while counter < max_steps:
         # print network
         # print_step(g2, a2, counter)
 
@@ -72,19 +76,22 @@ def r2(g2, a2, threshold_adopt, threshold_link, n_nodes, max_steps=50):
 
         if check_stable(new_edges) and check_stable(add_adopters) and check_stable(remove_adopters) \
                 and check_stable(remove_edges):
-            print(f'stable')
+            # print(f'stable')
             break
-    print(f'full cascades: {full_cascade(a2, n_nodes)}')
+    # print(f'full cascades: {full_cascade(a2, n_nodes)}')
     return y_a, y_b, y_c, y_d
 
 
 def r3(g3, a3, threshold_adopt, n_nodes, max_steps=50):
-    """Function to run non-monotonic diffusion"""
+    """
+    Function to run non-monotonic diffusion
+    :returns 4 arrays, each showing the diffusion of a behaviour
+    """
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
     counter = 0
 
-    for i in range(max_steps):
+    while counter < max_steps:
         # print network
         # print_step(g3, a3, counter)
 
@@ -103,9 +110,9 @@ def r3(g3, a3, threshold_adopt, n_nodes, max_steps=50):
         merge(a3, add_adopters)
         remove(a3, remove_adopters)
         if check_stable(remove_adopters):
-            print(f'stable')
+            # print(f'stable')
             break
-    print(f'full cascades: {full_cascade(a3, n_nodes)}')
+    # print(f'full cascades: {full_cascade(a3, n_nodes)}')
     return y_a, y_b, y_c, y_d
 
 
@@ -123,12 +130,12 @@ def plot_graph_rule(y1, y2, y3, y4, name):
     plt.show()
 
 
-def plot_graph_behaviour(r1, r2, r3, name):
+def plot_graph_behaviour(y1, y2, y3, name):
     """plot adopters over time for a behaviour"""
     plt.figure()
-    plt.plot(r1, label="R1")
-    plt.plot(r2, '--', label="R2")
-    plt.plot(r3, '-.', label="R3")
+    plt.plot(y1, label="R1")
+    plt.plot(y2, '--', label="R2")
+    plt.plot(y3, '-.', label="R3")
     plt.xlabel("Steps")
     plt.ylabel("# of adopters")
     plt.title(f'Adopters evolution {name}')
@@ -136,7 +143,18 @@ def plot_graph_behaviour(r1, r2, r3, name):
     plt.show()
 
 
+def plot_deltas(values):
+    rules = ['r12', 'r13', 'r23']
+    plt.figure()
+    plt.bar(rules, values)
+    plt.xlabel("Rule comparisons")
+    plt.ylabel("Step difference")
+    plt.title("Performance difference rules")
+    plt.show()
+
+
 def print_step(g, a, i):
+    """Function that prints the network graph and the adopters for a step"""
     print(f'step: {i}')
     print(g)
     print(a)

@@ -1,6 +1,5 @@
 def merge(d1, d2):
     """Function to merge two dictionaries without overwriting"""
-
     # for all new elements of dict2 add them to dict1
     for k, v in d2.items():
         for item in v:

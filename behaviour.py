@@ -2,7 +2,10 @@ from network import *
 
 
 def adoption(graph, adoption, threshold):
-    """Function for updating adopted nodes in a graph (monotonic)"""
+    """
+    Function for updating adopted nodes in a graph (monotonic)
+    :returns a list containing the nodes that adopted a new behaviour
+    """
 
     new_adoption = {}
     for behaviour, adopted in adoption.items():
@@ -40,26 +43,48 @@ def adoption(graph, adoption, threshold):
     return new_adoption
 
 
-def similarity(n1, n2, adopters):
-    """Function to check the similarity between two nodes"""
-    sim = []
+def unadopt(graph, adoption, threshold):
+    """
+    Function for updating adopted nodes in a graph (non-monotonic)
+    :returns a list containing the nodes that unadopted a new behaviour
+    """
 
-    # loop over all behaviour sets
-    for behaviour, adopted in adopters.items():
+    non_adopters = {}
+    for behaviour, adopted in adoption.items():
+        # new adopters and deserters list so that it doesn't effect calculations
+        new_deserters = []
 
-        # if both nodes are adopters add the behaviour
-        if n1 in adopted and n2 in adopted:
-            sim.append(behaviour)
-        # else if both nodes are not adopters add the behaviour
-        elif n1 not in adopted and n2 not in adopted:
-            sim.append(behaviour)
+        # loop all adopted nodes to see if they will unadopt
+        for node in adopted:
 
-    # return list of similar behaviours
-    return sim
+            # initialise count and get node's neighbours
+            count = 0
+            neighbours = graph[node]
+
+            # loop over all neighbours and increment count if that neighbour is an adopter
+            for neighbour in neighbours:
+                if neighbour in adopted:
+                    count += 1
+
+            # calculate ratio adopters/neighbours
+            if len(neighbours) == 0:
+                ratio = 0
+            else:
+                ratio = count / len(neighbours)
+
+            # add node to deserters if ratio less than threshold
+            if ratio <= threshold:
+                new_deserters.append(node)
+
+        non_adopters[behaviour] = new_deserters
+    return non_adopters
 
 
 def make_friends(graph, adopters, threshold):
-    """Function for updating edges in graph"""
+    """
+    Function for updating edges in graph
+    :returns a list containing the edges to add to the network
+    """
 
     # making temp graph
     new_edges = {}
@@ -97,42 +122,11 @@ def make_friends(graph, adopters, threshold):
     return new_edges
 
 
-def unadopt(graph, adoption, threshold):
-    """Function for updating adopted nodes in a graph (non-monotonic)"""
-
-    non_adopters = {}
-    for behaviour, adopted in adoption.items():
-        # new adopters and deserters list so that it doesn't effect calculations
-        new_deserters = []
-
-        # loop all adopted nodes to see if they will unadopt
-        for node in adopted:
-
-            # initialise count and get node's neighbours
-            count = 0
-            neighbours = graph[node]
-
-            # loop over all neighbours and increment count if that neighbour is an adopter
-            for neighbour in neighbours:
-                if neighbour in adopted:
-                    count += 1
-
-            # calculate ratio adopters/neighbours
-            if len(neighbours) == 0:
-                ratio = 0
-            else:
-                ratio = count / len(neighbours)
-
-            # add node to deserters if ratio less than threshold
-            if ratio <= threshold:
-                new_deserters.append(node)
-
-        non_adopters[behaviour] = new_deserters
-    return non_adopters
-
-
 def lose_friends(graph, adopters, threshold):
-    """Function for updating edges in graph"""
+    """
+    Function for updating edges in graph
+    :returns a list containing the edges to add to the network
+    """
 
     # making temp graph
     remove_edges = {}
@@ -156,3 +150,24 @@ def lose_friends(graph, adopters, threshold):
                     add_neighbour(node, neighbour, remove_edges)
 
     return remove_edges
+
+
+def similarity(n1, n2, adopters):
+    """
+    Function to check the similarity between two nodes
+    :returns a list containing the behaviours that node 1 and node 2 coincide
+    """
+    sim = []
+
+    # loop over all behaviour sets
+    for behaviour, adopted in adopters.items():
+
+        # if both nodes are adopters add the behaviour
+        if n1 in adopted and n2 in adopted:
+            sim.append(behaviour)
+        # else if both nodes are not adopters add the behaviour
+        elif n1 not in adopted and n2 not in adopted:
+            sim.append(behaviour)
+
+    # return list of similar behaviours
+    return sim
