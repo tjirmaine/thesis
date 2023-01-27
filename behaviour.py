@@ -1,14 +1,17 @@
+"""File that contains functions that imitate the behaviour of nodes in the network and the network itself"""
+
+
 from network import *
 
 
-def adoption(graph, adoption, threshold):
+def adoption(graph, adopters, threshold):
     """
     Function for updating adopted nodes in a graph (monotonic)
     :returns a list containing the nodes that adopted a new behaviour
     """
 
     new_adoption = {}
-    for behaviour, adopted in adoption.items():
+    for behaviour, adopted in adopters.items():
         # new adopters list so that it doesn't effect calculations
         new_adopters = []
 
@@ -43,14 +46,14 @@ def adoption(graph, adoption, threshold):
     return new_adoption
 
 
-def unadopt(graph, adoption, threshold):
+def unadopt(graph, adopters, threshold):
     """
     Function for updating adopted nodes in a graph (non-monotonic)
     :returns a list containing the nodes that unadopted a new behaviour
     """
 
     non_adopters = {}
-    for behaviour, adopted in adoption.items():
+    for behaviour, adopted in adopters.items():
         # new adopters and deserters list so that it doesn't effect calculations
         new_deserters = []
 
@@ -93,10 +96,8 @@ def make_friends(graph, adopters, threshold):
 
     # loop all nodes
     for node in graph:
-        # retrieve the neighbours of that node
+        # retrieve the neighbours, new neighbours (new edge may have formed during the process) of that node
         neighbours = graph[node]
-
-        # retrieve new neighbours (new edge may have formed during the process)
         new_neighbours = new_edges[node]
 
         # collecting all second neighbours into a list and removing duplicates
@@ -171,3 +172,20 @@ def similarity(n1, n2, adopters):
 
     # return list of similar behaviours
     return sim
+
+
+def full_cascade(adopted, n_nodes):
+    """Function to check whether a full cascade has occurred"""
+    cascades = []
+    for behaviour, nodes in adopted.items():
+        if len(nodes) == n_nodes:
+            cascades.append(behaviour)
+    return cascades
+
+
+def check_stable(d):
+    for _, v in d.items():
+        # if new_adopters dictionary has a non-empty array then not stable
+        if v:
+            return False
+    return True

@@ -1,3 +1,6 @@
+"""File that contains functions to manipulate dictionaries"""
+
+
 def merge(d1, d2):
     """Function to merge two dictionaries without overwriting"""
     # for all new elements of dict2 add them to dict1
@@ -27,20 +30,3 @@ def add_neighbour(n1, n2, graph):
 def add_node(x, graph):
     """Function for adding nodes to graph"""
     graph[x] = []
-
-
-def full_cascade(adopted, n_nodes):
-    """Function to check whether a full cascade has occurred"""
-    full_cascade = []
-    for behaviour, nodes in adopted.items():
-        if len(nodes) == n_nodes:
-            full_cascade.append(behaviour)
-    return full_cascade
-
-
-def check_stable(d):
-    for _, v in d.items():
-        # if new_adopters dictionary has a non-empty array then not stable
-        if v:
-            return False
-    return True

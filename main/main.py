@@ -7,8 +7,8 @@ import csv
 
 
 def run(n_nodes, p_edge, p_behaviour, threshold_adopt, threshold_link, behaviours, runs):
-    # initialise social networks model
 
+    # initialise social networks model
     links = {}
     adopters = {}
 
@@ -46,39 +46,36 @@ def run(n_nodes, p_edge, p_behaviour, threshold_adopt, threshold_link, behaviour
         g1 = copy.deepcopy(links)
         g2 = copy.deepcopy(links)
         g3 = copy.deepcopy(links)
-
         a1 = copy.deepcopy(adopters)
         a2 = copy.deepcopy(adopters)
         a3 = copy.deepcopy(adopters)
 
         print(f'RUN: {n}')
-
-        ### define steps here ###
         # monotonic FS + non-monotonic diffusion
-        r1_a, r1_b, r1_c, r1_d = r1(g1, a1, threshold_adopt, threshold_link, n_nodes)
+        r1_a, r1_b, r1_c, r1_d = r1(g1, a1, threshold_adopt, threshold_link)
 
         # non-monotonic FS + non-monotonic diffusion
-        r2_a, r2_b, r2_c, r2_d = r2(g2, a2, threshold_adopt, threshold_link, n_nodes)
+        r2_a, r2_b, r2_c, r2_d = r2(g2, a2, threshold_adopt, threshold_link)
 
         # non-monotonic diffusion
-        r3_a, r3_b, r3_c, r3_d = r3(g3, a3, threshold_adopt, n_nodes)
+        r3_a, r3_b, r3_c, r3_d = r3(g3, a3, threshold_adopt)
 
         # writing data to csv file
-        with open('data.csv', 'a', encoding='utf8', newline='') as f:
+        with open(f'data.csv', 'a', encoding='utf8', newline='') as f:
             writer = csv.writer(f)
             data = [
-                [n, 1, 'A', len(r1_a), r1_a],
-                [n, 1, 'B', len(r1_b), r1_b],
-                [n, 1, 'C', len(r1_c), r1_c],
-                [n, 1, 'D', len(r1_d), r1_d],
-                [n, 2, 'A', len(r2_a), r2_a],
-                [n, 2, 'B', len(r2_b), r2_b],
-                [n, 2, 'C', len(r2_c), r2_c],
-                [n, 2, 'D', len(r2_d), r2_d],
-                [n, 3, 'A', len(r3_a), r3_a],
-                [n, 3, 'B', len(r3_b), r3_b],
-                [n, 3, 'C', len(r3_c), r3_c],
-                [n, 3, 'D', len(r3_d), r3_d]
+                [n_nodes, n, 1, 'A', len(r1_a), r1_a],
+                [n_nodes, n, 1, 'B', len(r1_b), r1_b],
+                [n_nodes, n, 1, 'C', len(r1_c), r1_c],
+                [n_nodes, n, 1, 'D', len(r1_d), r1_d],
+                [n_nodes, n, 2, 'A', len(r2_a), r2_a],
+                [n_nodes, n, 2, 'B', len(r2_b), r2_b],
+                [n_nodes, n, 2, 'C', len(r2_c), r2_c],
+                [n_nodes, n, 2, 'D', len(r2_d), r2_d],
+                [n_nodes, n, 3, 'A', len(r3_a), r3_a],
+                [n_nodes, n, 3, 'B', len(r3_b), r3_b],
+                [n_nodes, n, 3, 'C', len(r3_c), r3_c],
+                [n_nodes, n, 3, 'D', len(r3_d), r3_d]
             ]
             writer.writerows(data)
 
@@ -110,7 +107,7 @@ def run(n_nodes, p_edge, p_behaviour, threshold_adopt, threshold_link, behaviour
     mean_r13 = sum(delta_r13) / len(delta_r13)
     mean_r23 = sum(delta_r23) / len(delta_r23)
     values = [mean_r12, mean_r13, mean_r23]
-    plot_deltas(values)
+    plot_deltas(values, n_nodes)
 
 
 """
@@ -121,21 +118,22 @@ This program performes the graph updates dor data collection for my bachelors th
 """
 if __name__ == "__main__":
 
-    # make csv
-    header = ['run', 'rule', 'behaviour', 'steps', 'trace']
-    with open('data.csv', 'w', encoding='utf8', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(header)
-
     # declare simulation criteria
     runs = 1000
-    n_nodes = 100
+    n_nodes = [10, 20, 50, 100]
     p_edge = 0.1
     p_behaviour = 0.2
     threshold_adopt = 0.3
     threshold_link = 0.5
     behaviours = ['A', 'B', 'C', 'D']
 
+    # make csv
+    header = ['n_nodes', 'run', 'rule', 'behaviour', 'steps', 'trace']
+    with open(f'data.csv', 'w', encoding='utf8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+
     # run sim
-    run(n_nodes, p_edge, p_behaviour, threshold_adopt, threshold_link, behaviours, runs)
+    for nth in n_nodes:
+        run(nth, p_edge, p_behaviour, threshold_adopt, threshold_link, behaviours, runs)
 

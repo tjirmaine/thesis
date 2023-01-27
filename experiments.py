@@ -1,29 +1,25 @@
+"""File that contains functions to run experiments/collect data"""
+
 from behaviour import *
 import matplotlib.pyplot as plt
 
 
-def r1(g1, a1, threshold_adopt, threshold_link, n_nodes, max_steps=50):
+def r1(g1, a1, threshold_adopt, threshold_link, max_steps=50):
     """
     Function to run monotonic FS + non-monotonic diffusion updates
     :returns 4 arrays, each showing the diffusion of a behaviour
     """
-    counter = 0
 
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
 
-    while counter < max_steps:
-        # print network
-        # print_step(g1, a1, counter)
+    for i in range(max_steps):
 
         # get no. adopters at each time step
         y_a.append(len(a1['A']))
         y_b.append(len(a1['B']))
         y_c.append(len(a1['C']))
         y_d.append(len(a1['D']))
-
-        # increment counter
-        counter += 1
 
         # step updates
         new_edges = make_friends(g1, a1, threshold_link)
@@ -37,31 +33,25 @@ def r1(g1, a1, threshold_adopt, threshold_link, n_nodes, max_steps=50):
         if check_stable(new_edges) and check_stable(add_adopters) and check_stable(remove_adopters):
             # print(f'stable')
             break
-    # print(f'full cascades: {full_cascade(a1, n_nodes)}')
+    # print(f'full cascades: {full_cascade(a1, len(g1)}')
     return y_a, y_b, y_c, y_d
 
 
-def r2(g2, a2, threshold_adopt, threshold_link, n_nodes, max_steps=50):
+def r2(g2, a2, threshold_adopt, threshold_link, max_steps=50):
     """
     Function to run non-monotonic FS + non-monotonic diffusion
     :returns 4 arrays, each showing the diffusion of a behaviour
     """
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
-    counter = 0
 
-    while counter < max_steps:
-        # print network
-        # print_step(g2, a2, counter)
+    for i in range(max_steps):
 
         # get no. adopters at each time step
         y_a.append(len(a2['A']))
         y_b.append(len(a2['B']))
         y_c.append(len(a2['C']))
         y_d.append(len(a2['D']))
-
-        # increment counter
-        counter += 1
 
         # step updates
         new_edges = make_friends(g2, a2, threshold_link)
@@ -78,41 +68,35 @@ def r2(g2, a2, threshold_adopt, threshold_link, n_nodes, max_steps=50):
                 and check_stable(remove_edges):
             # print(f'stable')
             break
-    # print(f'full cascades: {full_cascade(a2, n_nodes)}')
+    # print(f'full cascades: {full_cascade(a2, len(g2)}')
     return y_a, y_b, y_c, y_d
 
 
-def r3(g3, a3, threshold_adopt, n_nodes, max_steps=50):
+def r3(g3, a3, threshold_adopt, max_steps=50):
     """
     Function to run non-monotonic diffusion
     :returns 4 arrays, each showing the diffusion of a behaviour
     """
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
-    counter = 0
 
-    while counter < max_steps:
-        # print network
-        # print_step(g3, a3, counter)
-
+    for i in range(max_steps):
         # get no. adopters at each time step
         y_a.append(len(a3['A']))
         y_b.append(len(a3['B']))
         y_c.append(len(a3['C']))
         y_d.append(len(a3['D']))
 
-        # increment counter
-        counter += 1
-
         # step updates
         add_adopters = adoption(g3, a3, threshold_adopt)
         remove_adopters = unadopt(g3, a3, threshold_adopt)
         merge(a3, add_adopters)
         remove(a3, remove_adopters)
-        if check_stable(remove_adopters):
+
+        if check_stable(add_adopters) and check_stable(remove_adopters):
             # print(f'stable')
             break
-    # print(f'full cascades: {full_cascade(a3, n_nodes)}')
+    # print(f'full cascades: {full_cascade(a3, len(g3)}')
     return y_a, y_b, y_c, y_d
 
 
@@ -143,14 +127,15 @@ def plot_graph_behaviour(y1, y2, y3, name):
     plt.show()
 
 
-def plot_deltas(values):
+def plot_deltas(values, n):
     rules = ['r12', 'r13', 'r23']
     plt.figure()
     plt.bar(rules, values)
     plt.xlabel("Rule comparisons")
     plt.ylabel("Step difference")
     plt.title("Performance difference rules")
-    plt.show()
+    plt.savefig(str(n))
+    # plt.show()
 
 
 def print_step(g, a, i):
