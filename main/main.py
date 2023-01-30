@@ -52,30 +52,30 @@ def run(n_nodes, p_edge, p_behaviour, threshold_adopt, threshold_link, behaviour
 
         print(f'RUN: {n}')
         # monotonic FS + non-monotonic diffusion
-        r1_a, r1_b, r1_c, r1_d = r1(g1, a1, threshold_adopt, threshold_link)
+        r1_a, r1_b, r1_c, r1_d, cas1_a, cas1_b, cas1_c, cas1_d = r1(g1, a1, threshold_adopt, threshold_link)
 
         # non-monotonic FS + non-monotonic diffusion
-        r2_a, r2_b, r2_c, r2_d = r2(g2, a2, threshold_adopt, threshold_link)
+        r2_a, r2_b, r2_c, r2_d, cas2_a, cas2_b, cas2_c, cas2_d = r2(g2, a2, threshold_adopt, threshold_link)
 
         # non-monotonic diffusion
-        r3_a, r3_b, r3_c, r3_d = r3(g3, a3, threshold_adopt)
+        r3_a, r3_b, r3_c, r3_d, cas3_a, cas3_b, cas3_c, cas3_d = r3(g3, a3, threshold_adopt)
 
         # writing data to csv file
         with open(f'data.csv', 'a', encoding='utf8', newline='') as f:
             writer = csv.writer(f)
             data = [
-                [n_nodes, n, 1, 'A', len(r1_a), r1_a],
-                [n_nodes, n, 1, 'B', len(r1_b), r1_b],
-                [n_nodes, n, 1, 'C', len(r1_c), r1_c],
-                [n_nodes, n, 1, 'D', len(r1_d), r1_d],
-                [n_nodes, n, 2, 'A', len(r2_a), r2_a],
-                [n_nodes, n, 2, 'B', len(r2_b), r2_b],
-                [n_nodes, n, 2, 'C', len(r2_c), r2_c],
-                [n_nodes, n, 2, 'D', len(r2_d), r2_d],
-                [n_nodes, n, 3, 'A', len(r3_a), r3_a],
-                [n_nodes, n, 3, 'B', len(r3_b), r3_b],
-                [n_nodes, n, 3, 'C', len(r3_c), r3_c],
-                [n_nodes, n, 3, 'D', len(r3_d), r3_d]
+                [n_nodes, n, 1, 'A', len(r1_a), r1_a, cas1_a],
+                [n_nodes, n, 1, 'B', len(r1_b), r1_b, cas1_b],
+                [n_nodes, n, 1, 'C', len(r1_c), r1_c, cas1_c],
+                [n_nodes, n, 1, 'D', len(r1_d), r1_d, cas1_d],
+                [n_nodes, n, 2, 'A', len(r2_a), r2_a, cas2_a],
+                [n_nodes, n, 2, 'B', len(r2_b), r2_b, cas2_b],
+                [n_nodes, n, 2, 'C', len(r2_c), r2_c, cas2_c],
+                [n_nodes, n, 2, 'D', len(r2_d), r2_d, cas2_d],
+                [n_nodes, n, 3, 'A', len(r3_a), r3_a, cas3_a],
+                [n_nodes, n, 3, 'B', len(r3_b), r3_b, cas3_b],
+                [n_nodes, n, 3, 'C', len(r3_c), r3_c, cas3_c],
+                [n_nodes, n, 3, 'D', len(r3_d), r3_d, cas3_d]
             ]
             writer.writerows(data)
 
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     behaviours = ['A', 'B', 'C', 'D']
 
     # make csv
-    header = ['n_nodes', 'run', 'rule', 'behaviour', 'steps', 'trace']
+    header = ['n_nodes', 'run', 'rule', 'behaviour', 'steps', 'trace', 'full_cascade']
     with open(f'data.csv', 'w', encoding='utf8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)

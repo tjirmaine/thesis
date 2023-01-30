@@ -12,6 +12,7 @@ def r1(g1, a1, threshold_adopt, threshold_link, max_steps=50):
 
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
+    c_a, c_b, c_c, c_d = 0, 0, 0, 0
 
     for i in range(max_steps):
 
@@ -33,8 +34,18 @@ def r1(g1, a1, threshold_adopt, threshold_link, max_steps=50):
         if check_stable(new_edges) and check_stable(add_adopters) and check_stable(remove_adopters):
             # print(f'stable')
             break
+
+    c = full_cascade(a1, len(g1))
+    if 'A' in c:
+        c_a = 1
+    if 'B' in c:
+        c_b = 1
+    if 'C' in c:
+        c_c = 1
+    if 'D' in c:
+        c_d = 1
     # print(f'full cascades: {full_cascade(a1, len(g1)}')
-    return y_a, y_b, y_c, y_d
+    return y_a, y_b, y_c, y_d, c_a, c_b, c_c, c_d
 
 
 def r2(g2, a2, threshold_adopt, threshold_link, max_steps=50):
@@ -44,6 +55,7 @@ def r2(g2, a2, threshold_adopt, threshold_link, max_steps=50):
     """
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
+    c_a, c_b, c_c, c_d = 0, 0, 0, 0
 
     for i in range(max_steps):
 
@@ -68,8 +80,18 @@ def r2(g2, a2, threshold_adopt, threshold_link, max_steps=50):
                 and check_stable(remove_edges):
             # print(f'stable')
             break
+
+    c = full_cascade(a2, len(g2))
+    if 'A' in c:
+        c_a = 1
+    if 'B' in c:
+        c_b = 1
+    if 'C' in c:
+        c_c = 1
+    if 'D' in c:
+        c_d = 1
     # print(f'full cascades: {full_cascade(a2, len(g2)}')
-    return y_a, y_b, y_c, y_d
+    return y_a, y_b, y_c, y_d, c_a, c_b, c_c, c_d
 
 
 def r3(g3, a3, threshold_adopt, max_steps=50):
@@ -79,6 +101,7 @@ def r3(g3, a3, threshold_adopt, max_steps=50):
     """
     # for data collection
     y_a, y_b, y_c, y_d = [], [], [], []
+    c_a, c_b, c_c, c_d = 0, 0, 0, 0
 
     for i in range(max_steps):
         # get no. adopters at each time step
@@ -96,8 +119,18 @@ def r3(g3, a3, threshold_adopt, max_steps=50):
         if check_stable(add_adopters) and check_stable(remove_adopters):
             # print(f'stable')
             break
-    # print(f'full cascades: {full_cascade(a3, len(g3)}')
-    return y_a, y_b, y_c, y_d
+
+    c = full_cascade(a3, len(g3))
+    if 'A' in c:
+        c_a = 1
+    if 'B' in c:
+        c_b = 1
+    if 'C' in c:
+        c_c = 1
+    if 'D' in c:
+        c_d = 1
+
+    return y_a, y_b, y_c, y_d, c_a, c_b, c_c, c_d
 
 
 def plot_graph_rule(y1, y2, y3, y4, name):
